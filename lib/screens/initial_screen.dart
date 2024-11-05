@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:primeiro_projeto_flutter/data/task_inherited.dart';
+import 'package:primeiro_projeto_flutter/screens/task_form.dart';
 
 import '../components/task.dart';
 
@@ -19,48 +21,19 @@ class _InitialScreenState extends State<InitialScreen> {
       appBar: AppBar(
         leading: Container(),
         backgroundColor: Colors.blue,
-        title: const Text('Tarefas'),
+        title: const Text('Tarefas', style: TextStyle(color: Colors.white),),
       ),
-      body: AnimatedOpacity(
-        opacity: opacidade ? 1 : 0,
-        duration: const Duration(
-            milliseconds: 1000
-        ),
-        child: ListView(
-          padding: const EdgeInsets.all(8.0),
-          children: const [
-            Task(
-                "Aprender Flutter e java e angular e C# e mysql e mariaDB e microsservices",
-                'assets/images/santos.png',
-                1),
-            Task(
-                "Aprender Java",
-                "assets/images/java.png",
-                2),
-            Task(
-                "Aprender C#",
-                "assets/images/c#.png",
-                3),
-            Task(
-                "Aprender MySQL",
-                "assets/images/mysql.png",
-                4),
-            Task(
-                "Aprender MariaDB",
-                "assets/images/mariadb.jpg",
-                5),
-            SizedBox(
-              height: 90,
-            )
-          ],
-        ),
+      body: ListView(
+        padding: const EdgeInsets.only(left: 8, right: 8, top: 8, bottom: 90),
+        children:
+         TaskInherited.of(context).taskList,
       ),
-      floatingActionButton: FloatingActionButton(onPressed: () {
-        setState(() {
-          opacidade = !opacidade;
-        });
-      },
-        child: const Icon(Icons.remove_red_eye),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (contextNew) => TaskForm(taskContext: context)));
+        },
+        child: const Icon(Icons.add),
       ),
     );
   }

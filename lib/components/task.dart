@@ -19,6 +19,10 @@ class _TaskState extends State<Task> {
     Colors.orange, Colors.purple, Colors.red, Colors.black];
   Color colorLevel = Colors.blue;
 
+  bool assetOrNetwork() {
+    return !widget.foto.contains('http');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -51,10 +55,8 @@ class _TaskState extends State<Task> {
                         ),
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(4),
-                          child: Image.asset(
-                            widget.foto,
-                            fit: BoxFit.cover,
-                          ),
+                          child: assetOrNetwork() ? Image.asset(widget.foto,fit: BoxFit.cover) :
+                          Image.network(widget.foto,fit: BoxFit.cover),
                         )),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
