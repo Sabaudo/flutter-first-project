@@ -1,22 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:primeiro_projeto_flutter/dao/task_dao.dart';
 
 import 'difficulty.dart';
 
 class Task extends StatefulWidget {
   final String nome;
   final String foto;
-  final int difficultyLevel;
-  const Task(this.nome, this.foto, this.difficultyLevel, {super.key});
+  final int dificuldade;
+
+  Task(this.nome, this.foto, this.dificuldade, {super.key});
+
+  int nivel = 0;
+  int mastery = 0;
 
   @override
   State<Task> createState() => _TaskState();
 }
 
 class _TaskState extends State<Task> {
-  int nivel = 0;
-  int mastery = 0;
-  List<Color> colors = [Colors.blue, Colors.green, Colors.yellow,
-    Colors.orange, Colors.purple, Colors.red, Colors.black];
+  List<Color> colors = [
+    Colors.blue,
+    Colors.green,
+    Colors.yellow,
+    Colors.orange,
+    Colors.purple,
+    Colors.red,
+    Colors.black
+  ];
   Color colorLevel = Colors.blue;
 
   bool assetOrNetwork() {
@@ -55,8 +65,9 @@ class _TaskState extends State<Task> {
                         ),
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(4),
-                          child: assetOrNetwork() ? Image.asset(widget.foto,fit: BoxFit.cover) :
-                          Image.network(widget.foto,fit: BoxFit.cover),
+                          child: assetOrNetwork()
+                              ? Image.asset(widget.foto, fit: BoxFit.cover)
+                              : Image.network(widget.foto, fit: BoxFit.cover),
                         )),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -71,7 +82,7 @@ class _TaskState extends State<Task> {
                                 overflow: TextOverflow.ellipsis,
                               ),
                             )),
-                        Difficulty(difficultyLevel: widget.difficultyLevel),
+                        Difficulty(difficultyLevel: widget.dificuldade),
                       ],
                     ),
                     Padding(
@@ -85,9 +96,12 @@ class _TaskState extends State<Task> {
                                 shape: const RoundedRectangleBorder(
                                     borderRadius: BorderRadius.all(
                                         Radius.circular(5.0)))),
+                            onLongPress: () {
+                              TaskDao().delete(widget.nome);
+                            },
                             onPressed: () {
                               setState(() {
-                                nivel++;
+                                widget.nivel++;
                                 updateColor();
                               });
                               // print('Evoluiu para o nivel $nivel');
@@ -123,13 +137,13 @@ class _TaskState extends State<Task> {
                         borderRadius: BorderRadius.circular(5.0),
                         color: Colors.white,
                         backgroundColor: Colors.black38,
-                        value: (widget.difficultyLevel > 0)
-                            ? (nivel / widget.difficultyLevel) / 10
+                        value: (widget.dificuldade > 0)
+                            ? (widget.nivel / widget.dificuldade) / 10
                             : 1,
                       ),
                     ),
                     Text(
-                      'Nivel: $nivel',
+                      'Nivel: ${widget.nivel}',
                       style: const TextStyle(color: Colors.white, fontSize: 16),
                     ),
                   ],
@@ -143,12 +157,11 @@ class _TaskState extends State<Task> {
   }
 
   void updateColor() {
-    double level = (nivel / widget.difficultyLevel);
-    if(level > 10 && mastery < 6) {
-      mastery++;
-      nivel = 0;
-      colorLevel = colors[mastery];
+    double level = (widget.nivel / widget.dificuldade);
+    if (level > 10 && widget.mastery < 6) {
+      widget.mastery++;
+      widget.nivel = 0;
+      colorLevel = colors[widget.mastery];
     }
   }
 }
-

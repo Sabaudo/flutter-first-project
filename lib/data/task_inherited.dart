@@ -8,11 +8,11 @@ class TaskInherited extends InheritedWidget {
   }) : super(child: child);
 
   final List<Task> taskList = [
-    const Task("Aprender Flutter e java e angular e C# e mysql e mariaDB e microsservices",'assets/images/santos.png', 1),
-    const Task("Aprender Java", "assets/images/java.png", 2),
-    const Task("Aprender C#","assets/images/c#.png", 3),
-    const Task("Aprender MySQL", "assets/images/mysql.png", 4),
-    const Task("Aprender MariaDB","assets/images/mariadb.jpg", 5)
+    Task("Aprender Flutter e java e angular e C# e mysql e mariaDB e microsservices",'assets/images/santos.png', 1),
+    Task("Aprender Java", "assets/images/java.png", 2),
+    Task("Aprender C#","assets/images/c#.png", 3),
+    Task("Aprender MySQL", "assets/images/mysql.png", 4),
+    Task("Aprender MariaDB","assets/images/mariadb.jpg", 5)
   ];
 
   void newTask(String name, String img, int difficulty) {
