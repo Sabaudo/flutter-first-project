@@ -3,7 +3,6 @@ import 'dart:ffi';
 import 'package:flutter/material.dart';
 import 'package:primeiro_projeto_flutter/components/task.dart';
 import 'package:primeiro_projeto_flutter/dao/task_dao.dart';
-import 'package:primeiro_projeto_flutter/data/task_inherited.dart';
 
 class TaskForm extends StatefulWidget {
   const TaskForm({super.key, required this.taskContext});
@@ -147,9 +146,12 @@ class _TaskFormState extends State<TaskForm> {
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
                           TaskDao().save(Task(
-                              nameController.text,
-                              imgSrcController.text,
-                              int.parse(difficultyController.text)));
+                            nome:  nameController.text,
+                            foto:  imgSrcController.text,
+                            dificuldade: int.parse(difficultyController.text),
+                            nivel: 0,
+                            mastery: 0,
+                          ));
 
                           // TaskInherited.of(widget.taskContext).newTask(
                           //     nameController.text,
@@ -159,7 +161,7 @@ class _TaskFormState extends State<TaskForm> {
                             const SnackBar(
                                 content: Text('Criando nova tarefa')),
                           );
-                          Navigator.pop(context);
+                          Navigator.pop(context, true);
                         }
                       },
                       child: const Text('Adicionar'))

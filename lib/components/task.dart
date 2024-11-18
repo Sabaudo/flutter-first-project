@@ -8,10 +8,18 @@ class Task extends StatefulWidget {
   final String foto;
   final int dificuldade;
 
-  Task(this.nome, this.foto, this.dificuldade, {super.key});
 
-  int nivel = 0;
-  int mastery = 0;
+  Task({
+    required this.nome,
+    required this.foto,
+    required this.dificuldade,
+    required this.nivel,
+    required this.mastery,
+    super.key,
+  });
+
+  int nivel;
+  int mastery;
 
   @override
   State<Task> createState() => _TaskState();
@@ -31,6 +39,13 @@ class _TaskState extends State<Task> {
 
   bool assetOrNetwork() {
     return !widget.foto.contains('http');
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    colorLevel = colors[widget.mastery];
   }
 
   @override
@@ -96,9 +111,26 @@ class _TaskState extends State<Task> {
                                 shape: const RoundedRectangleBorder(
                                     borderRadius: BorderRadius.all(
                                         Radius.circular(5.0)))),
-                            onLongPress: () {
-                              TaskDao().delete(widget.nome);
-                            },
+                            onLongPress: () => showDialog(
+                                context: context,
+                                builder: (BuildContext dialogContext) =>
+                                    AlertDialog(
+                                      title: const Text('Exclusão'),
+                                      content: const Text(
+                                        'Deseja excluir esta tarefa?'),
+                                      actions: <Widget>[
+                                        TextButton(
+                                            onPressed: () => Navigator.pop(
+                                                dialogContext, 'Cancelar'),
+                                            child: const Text('Cancelar')),
+                                        TextButton(
+                                            onPressed: () {
+                                              TaskDao().delete(widget.nome);
+                                              Navigator.pop(dialogContext);
+                                            },
+                                            child: const Text('OK'))
+                                      ],
+                                    )),
                             onPressed: () {
                               setState(() {
                                 widget.nivel++;
@@ -163,5 +195,6 @@ class _TaskState extends State<Task> {
       widget.nivel = 0;
       colorLevel = colors[widget.mastery];
     }
+    TaskDao().save(widget);
   }
 }

@@ -23,7 +23,19 @@ class _InitialScreenState extends State<InitialScreen> {
               onPressed: () {
                 setState(() {});
               },
-              icon: const Icon(Icons.refresh))
+              icon: const Icon(
+                Icons.refresh,
+                color: Colors.white,
+              )),
+          IconButton(
+              onPressed: () {
+                TaskDao().deleteDatabase('task');
+                setState(() {});
+              },
+              icon: const Icon(
+                Icons.delete,
+                color: Colors.redAccent,
+              ))
         ],
         backgroundColor: Colors.blue,
         title: const Text(
@@ -40,13 +52,10 @@ class _InitialScreenState extends State<InitialScreen> {
               switch (snapshot.connectionState) {
                 case ConnectionState.none:
                   return const LoadingWidget();
-                  break;
                 case ConnectionState.waiting:
                   return const LoadingWidget();
-                  break;
                 case ConnectionState.active:
                   return const LoadingWidget();
-                  break;
                 case ConnectionState.done:
                   if (snapshot.hasData && items != null && items.isNotEmpty) {
                     return ListView.builder(
@@ -71,7 +80,6 @@ class _InitialScreenState extends State<InitialScreen> {
                     ),
                   );
               }
-              return const Text('Erro desconhecido');
             }),
       ),
       floatingActionButton: FloatingActionButton(
@@ -80,7 +88,14 @@ class _InitialScreenState extends State<InitialScreen> {
                   context,
                   MaterialPageRoute(
                       builder: (contextNew) => TaskForm(taskContext: context)))
-              .then((value) => setState(() => {}));
+              .then((value) async {
+            if (value == true) {
+              await TaskDao().findAll();
+              setState(() {
+                print('Recarregando');
+              });
+            }
+          });
         },
         child: const Icon(Icons.add),
       ),
